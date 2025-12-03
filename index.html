@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Free Security Check!</title>
+    <style>
+        /* Top Banner */
+        .top-banner {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #ccc; /* gray scale banner */
+            color: #111;
+            text-align: center;
+            font-weight: bold;
+            padding: 8px 15px;
+            font-size: 0.95em;
+            z-index: 2000;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+            border-radius: 4px;
+        }
+
+        body {
+            background-color: #f2f2f2;
+            font-family: "Segoe UI", Arial, sans-serif;
+            padding: 60px 20px 80px 20px; /* top padding for banner + bottom for donation */
+            color: #222;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            text-align: center;
+            color: #111;
+            font-size: 2.4em;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            text-decoration: underline;
+        }
+
+        /* SERVICES BOX */
+        .services-box {
+            background: #ffffff;
+            padding: 25px 35px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            max-width: 700px;
+            width: 100%;
+            margin-bottom: 40px;
+            border: 1px solid #ddd;
+            position: relative;
+        }
+
+        /* Tooltip for the list */
+        .list-tooltip {
+            position: absolute;
+            top: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #111;
+            color: #fff;
+            padding: 6px 10px;
+            border-radius: 5px;
+            font-size: 0.9em;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .services-box:hover .list-tooltip {
+            opacity: 1;
+        }
+
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        li {
+            padding: 10px 0;
+            border-bottom: 1px solid #e2e2e2;
+            font-size: 1.1em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #333;
+        }
+
+        li:last-child {
+            border-bottom: none;
+        }
+
+        li::before {
+            content: "✔";
+            color: #555;
+            font-weight: bold;
+        }
+
+        /* CONTACT SECTION */
+        .contact {
+            max-width: 700px;
+            width: 100%;
+            padding: 25px;
+            border-radius: 12px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            text-align: center;
+            border: 1px solid #ddd;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .contact h2 {
+            margin-top: 0;
+            font-size: 1.8em;
+            color: #111;
+        }
+
+        .email a {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #000;
+            text-decoration: none;
+            position: relative;
+        }
+
+        .email-tooltip {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: -35px;
+            background: #111;
+            color: #fff;
+            padding: 6px 10px;
+            border-radius: 5px;
+            font-size: 0.9em;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .email a:hover + .email-tooltip {
+            opacity: 1;
+        }
+
+        /* MISSION SECTION */
+        .mission {
+            max-width: 700px;
+            background: #ffffff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+            border: 1px solid #ddd;
+            text-align: center;
+            position: relative;
+        }
+
+        .mission-text {
+            position: relative;
+            display: inline-block;
+        }
+
+        .mission-tooltip {
+            position: absolute;
+            left: 50%;
+            bottom: -35px;
+            transform: translateX(-50%);
+            background: #111;
+            color: #fff;
+            padding: 6px 10px;
+            border-radius: 5px;
+            font-size: 0.9em;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .mission-text:hover + .mission-tooltip {
+            opacity: 1;
+        }
+
+        /* Scroll down indicator */
+        .scroll-down {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1em;
+            color: #111;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px 15px;
+            border-radius: 25px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            animation: bounce 1.5s infinite;
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-10px); }
+        }
+
+        .tooltip {
+            position: fixed;
+            bottom: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #111;
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.9em;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            white-space: nowrap;
+            z-index: 1001;
+        }
+
+        .scroll-down:hover + .tooltip {
+            opacity: 1;
+        }
+
+        .charity {
+            display: inline-block;
+            position: relative;
+            font-weight: bold;
+        }
+
+        .charity-tooltip {
+            position: absolute;
+            bottom: -32px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #111;
+            color: #fff;
+            padding: 6px 10px;
+            border-radius: 5px;
+            font-size: 0.85em;
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .charity:hover + .charity-tooltip {
+            opacity: 1;
+        }
+
+        /* Donation Footer */
+        .donation-footer {
+            text-align: center;
+            font-size: 0.85em;
+            color: #555;
+            opacity: 0.9;
+            margin-top: 60px;
+        }
+
+        .donation-footer p {
+            margin: 4px 0;
+            word-break: break-all;
+        }
+
+    </style>
+</head>
+<body>
+
+<!-- Top Banner -->
+<div class="top-banner">
+    Hurry up and get your free Security Check!
+</div>
+
+<h1>Free Security Check for ANY Website</h1>
+
+<!-- SERVICES BOX -->
+<div class="services-box">
+    <div class="list-tooltip">All the vulnerabilities I know how to find</div>
+    <ul>
+        <li>Access Control Misconfiguration</li>
+        <li>Access Token Leakage</li>
+        <li>Account Enumeration</li>
+        <li>Admin Panel Exposure</li>
+        <li>API Broken Object Level Authorization</li>
+        <li>API Broken Object Property Level Authorization</li>
+        <li>API Broken Authentication</li>
+        <li>API Insecure Endpoints</li>
+        <li>API Mass Assignment</li>
+        <li>API Parameter Tampering</li>
+        <li>API Rate-Limit Bypass</li>
+        <li>API Security Misconfiguration</li>
+        <li>Arbitrary File Creation</li>
+        <li>Arbitrary File Delete</li>
+        <li>Arbitrary File Read</li>
+        <li>Arbitrary File Upload</li>
+        <li>Authorization Bypass</li>
+        <li>Automatic Indexing / Directory Listing Exposure</li>
+        <li>Backdoor Logic Vulnerabilities</li>
+        <li>Blind SQL Injection</li>
+        <li>Blind SSRF</li>
+        <li>Body Parameter Pollution</li>
+        <li>Broken Access Control</li>
+        <li>Broken Authentication</li>
+        <li>Broken Cryptographic Storage</li>
+        <li>Broken Function Level Authorization</li>
+        <li>Broken JWT Validation</li>
+        <li>Broken Origin Validation</li>
+        <li>Broken Session Management</li>
+        <li>Buffer Overflow</li>
+        <li>Business Logic Errors</li>
+        <li>CORS Misconfiguration</li>
+        <li>Cache Poisoning</li>
+        <li>Cache Deception</li>
+        <li>CAPTCHA Bypass</li>
+        <li>CDN Misconfiguration</li>
+        <li>Clickjacking</li>
+        <li>Cloud IAM Misconfigurations</li>
+        <li>Cloud Metadata Exposure</li>
+        <li>Command Injection</li>
+        <li>Content Spoofing</li>
+        <li>Cookie Manipulation</li>
+        <li>Cookie Missing HttpOnly</li>
+        <li>Cookie Missing Secure</li>
+        <li>Cookie Missing SameSite</li>
+        <li>Cross-Domain Resource Exposure</li>
+        <li>Cross-Origin Resource Sharing Abuse</li>
+        <li>Cross Site Request Forgery (CSRF)</li>
+        <li>Cross Site Scripting (XSS)</li>
+        <li>CSV/Formula Injection</li>
+        <li>Data Exposure</li>
+        <li>Debug Mode Enabled</li>
+        <li>Default Credentials</li>
+        <li>Deserialization Vulnerabilities</li>
+        <li>Directory Traversal</li>
+        <li>DNS Misconfiguration</li>
+        <li>DOM Clobbering</li>
+        <li>DOM-Based XSS</li>
+        <li>DOM Pollution</li>
+        <li>DOS via Heavy Queries</li>
+        <li>Duplicate Session Generation</li>
+        <li>Email Header Injection</li>
+        <li>Encrypted Token Misuse</li>
+        <li>Error Message Information Leakage</li>
+        <li>Exposed Admin Interfaces</li>
+        <li>Exposed Environment Variables</li>
+        <li>Exposed Git/SVN Repositories</li>
+        <li>Exposed Internal APIs</li>
+        <li>Exposed Server Status Pages</li>
+        <li>File Inclusion (LFI)</li>
+        <li>File Inclusion (RFI)</li>
+        <li>File Permission Misconfiguration</li>
+        <li>File Upload Bypass</li>
+        <li>Forced Browsing</li>
+        <li>Frame Injection</li>
+        <li>Functionality Abuse</li>
+        <li>GraphQL Introspection Exposure</li>
+        <li>GraphQL Injection</li>
+        <li>GraphQL Excessive Data Exposure</li>
+        <li>Hardcoded Secrets</li>
+        <li>Header Injection</li>
+        <li>Hidden Parameter Abuse</li>
+        <li>Host Header Injection</li>
+        <li>HTML Injection</li>
+        <li>HTTP Desync Attack</li>
+        <li>HTTP Host Confusion</li>
+        <li>HTTP Parameter Pollution</li>
+        <li>HTTP Request Smuggling</li>
+        <li>HTTP Response Splitting</li>
+        <li>IDOR</li>
+        <li>Improper Access Token Storage</li>
+        <li>Insecure Deserialization</li>
+        <li>Insecure File Permissions</li>
+        <li>Insecure JWT Handling</li>
+        <li>Input Validation Errors</li>
+        <li>Insufficient Logging & Monitoring</li>
+        <li>Internal Endpoint Exposure</li>
+        <li>JSON Injection</li>
+        <li>JWT Algorithm Confusion</li>
+        <li>JWT Signature Bypass</li>
+        <li>JWT Token Leakage</li>
+        <li>Key Management Failures</li>
+        <li>Known Vulnerable Components</li>
+        <li>Leaky Buckets</li>
+        <li>Local File Disclosure</li>
+        <li>Logic Injection</li>
+        <li>Login CSRF</li>
+        <li>Low-Entropy Tokens</li>
+        <li>Machine-in-the-Middle Risks</li>
+        <li>Mass Assignment</li>
+        <li>Memory Disclosure</li>
+        <li>MIME Sniffing Vulnerabilities</li>
+        <li>Mixed Content</li>
+        <li>Misconfigured Certificates</li>
+        <li>Misconfigured Proxies</li>
+        <li>Misconfigured Reverse Proxy</li>
+        <li>Missing Authorization</li>
+        <li>Missing CORS Controls</li>
+        <li>Missing Security Headers</li>
+        <li>NoSQL Injection</li>
+        <li>Null-Byte Injection</li>
+        <li>Number Guessing</li>
+        <li>OAuth Misconfiguration</li>
+        <li>Object Injection</li>
+        <li>Open Redirect</li>
+        <li>Overly Permissive CORS</li>
+        <li>Path Traversal</li>
+        <li>PHP Object Injection</li>
+        <li>Privilege Escalation</li>
+        <li>Prototype Pollution</li>
+        <li>Publicly Exposed Backups</li>
+        <li>Publicly Exposed Logs</li>
+        <li>Query Parameter Tampering</li>
+        <li>Race Conditions</li>
+        <li>Rate Limit Absence</li>
+        <li>ReDoS</li>
+        <li>Remote Code Execution</li>
+        <li>Resource Enumeration</li>
+        <li>Role Confusion</li>
+        <li>Sensitive Data Exposure</li>
+        <li>Server Side Request Forgery</li>
+        <li>SSTI</li>
+        <li>Session Fixation</li>
+        <li>Session Hijacking</li>
+        <li>Session Replay</li>
+        <li>Short Token Lifetimes</li>
+        <li>SMTP Injection</li>
+        <li>SNI Injection</li>
+        <li>SQL Injection</li>
+        <li>Subdomain Takeover</li>
+        <li>Template Injection</li>
+        <li>Third-Party Dependency Vulnerabilities</li>
+        <li>Token Leakage</li>
+        <li>Token Reuse Vulnerabilities</li>
+        <li>TOCTOU</li>
+        <li>Trusted Origin Misconfiguration</li>
+        <li>Unauthenticated Sensitive Endpoints</li>
+        <li>Unencrypted Sensitive Cookies</li>
+        <li>Unrestricted File Upload</li>
+        <li>Unvalidated Redirects</li>
+        <li>Unsafe Caching</li>
+        <li>Unsafe Deserialization</li>
+        <li>Verb Tampering</li>
+        <li>Version Disclosure</li>
+        <li>Visible Stack Traces</li>
+        <li>Weak Cryptography</li>
+        <li>Weak Password Policies</li>
+        <li>Web Cache Deception</li>
+        <li>Web Cache Poisoning</li>
+        <li>WebSocket Authentication Bypass</li>
+        <li>WebSocket Injection</li>
+        <li>XML External Entity Injection (XXE)</li>
+        <li>XSLT Injection</li>
+        <li>XSSI</li>
+        <li>Zero-Permission Endpoint Exposure</li>
+        <li>Zombie Endpoints</li>
+    </ul>
+</div>
+
+<!-- Mission section -->
+<div class="mission">
+    <span class="mission-text">
+       You know, I've got a real passion for Cyber Security. Lately, it’s hard to ignore just how unsafe the internet has gotten. It’s kind of alarming, honestly. So, I decided to do something about it! I'm offering my skills to the community at no cost at all. I mean, everyone should have access to a safer website, right? It just feels like the right thing to do.
+    </span>
+    <span class="mission-tooltip">This is my mindset.</span>
+</div>
+
+<!-- CONTACT -->
+<div class="contact" id="contact">
+    <h2>Contact Me</h2>
+    <p>
+        This is a <span class="charity">charity service</span>
+        <span class="charity-tooltip">My service is for FREE!</span> — everything is completely free!
+    </p>
+    <p>To get your free security check, just email me in detail at:</p>
+    <p class="email">
+        <a href="mailto:milahmilah70@outlook.com">milahmilah70@outlook.com</a>
+        <span class="email-tooltip">Email me anytime</span>
+    </p>
+</div>
+
+<!-- Scroll Button -->
+<div class="scroll-down" onclick="scrollToBottom()">⬇ Scroll down for more information ⬇</div>
+<div class="tooltip">Click to scroll to the bottom</div>
+
+<!-- Donation Footer -->
+<div class="donation-footer">
+    <p>This service is completely free — donations are optional if you want to support me!</p>
+    <p><strong>ETH:</strong> 0x5fe575b6d6b70867949d4564869c00a03bd18bb3</p>
+    <p><strong>Solana:</strong> 7Wkud1uFsuuj146SxtfhhA6EfbrREydSr2iFLrbTqDYc</p>
+    <p><strong>Bitcoin:</strong> bc1qqxsknanxnhk67wp3lgkzr5v7kk3dmcvxeycw9h
